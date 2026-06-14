@@ -1,0 +1,10 @@
+:root {
+  --surface: #131313;
+  --surface-dim: #0e0e0e;
+  --surface-bright: #3a3939;
+  --on-surface: #ffffff;
+  --on-surface-variant: #a1a1a1;
+  --radius: 4px;
+  --margin-x: 40px;
+  --backdrop: rgba(0, 0, 0, 0.85);
+}
