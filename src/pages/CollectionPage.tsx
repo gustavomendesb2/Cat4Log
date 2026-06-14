@@ -9,6 +9,18 @@ import { collectionProgress, filterCards } from '../lib/catalog/derive'
 import { getCollectionBySlug, listCards, listCollections } from '../lib/catalog/repository'
 import type { Card, CardStatus, Collection } from '../lib/catalog/types'
 
+function exportCsv(name: string, cards: Card[]) {
+  const header = 'number,name,aspect_ratio,status,tags,image_url'
+  const body = cards.map((c) =>
+    [c.number, c.name, c.aspectRatio, c.status, c.tags.join(';'), c.imagePath ?? ''].join(',')).join('\n')
+  const blob = new Blob([`${header}\n${body}`], { type: 'text/csv' })
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = `${name.toLowerCase()}.csv`
+  a.click()
+  URL.revokeObjectURL(a.href)
+}
+
 export function CollectionPage() {
   const { slug = 'pokemon' } = useParams()
   const [collections, setCollections] = useState<Collection[]>([])
@@ -60,6 +72,8 @@ export function CollectionPage() {
               className="rounded px-3 py-1 text-on-variant hover:text-on-surface">
               {density === 'comfortable' ? 'Compacto' : 'Confortável'}
             </button>
+            <button onClick={() => collection && exportCsv(collection.name, cards)}
+              className="rounded px-3 py-1 text-on-variant hover:text-on-surface">Exportar</button>
           </div>
         </div>
         <CollectionGrid cards={visible} loading={loading} density={density} onOpen={setActive} />
