@@ -1,12 +1,14 @@
 import { supabase } from '../supabase'
 import { prepareImage } from './image'
-import type { AspectRatio, Card, Collection, NewCard } from './types'
+import { assignNumbers, slugify } from './numbering'
+import type { AspectRatio, Card, Collection, NewCard, Subcollection } from './types'
 
 const BUCKET = 'card-images'
 
 interface CardRow {
   id: string
   collection_id: string
+  subcollection_id: string
   number: string
   name: string
   image_path: string | null
@@ -20,6 +22,7 @@ function toCard(r: CardRow): Card {
   return {
     id: r.id,
     collectionId: r.collection_id,
+    subcollectionId: r.subcollection_id,
     number: r.number,
     name: r.name,
     imagePath: r.image_path,
@@ -49,22 +52,93 @@ export async function getCollectionBySlug(slug: string): Promise<Collection | nu
   return data ? { id: data.id, slug: data.slug, name: data.name, sortOrder: data.sort_order } : null
 }
 
-export async function listCards(collectionId: string): Promise<Card[]> {
+export async function listCardsByCollection(collectionId: string): Promise<Card[]> {
   const { data, error } = await supabase
     .from('cards').select('*').eq('collection_id', collectionId).order('sort_order')
   if (error) throw error
   return (data as CardRow[]).map(toCard)
 }
 
-export async function createCards(collectionId: string, cards: NewCard[]): Promise<void> {
+export async function listCardsBySubcollection(subcollectionId: string): Promise<Card[]> {
+  const { data, error } = await supabase
+    .from('cards').select('*').eq('subcollection_id', subcollectionId).order('sort_order')
+  if (error) throw error
+  return (data as CardRow[]).map(toCard)
+}
+
+export async function listSubcollections(collectionId: string): Promise<Subcollection[]> {
+  const { data, error } = await supabase
+    .from('subcollections').select('*').eq('collection_id', collectionId).order('sort_order')
+  if (error) throw error
+  return data.map((s) => ({
+    id: s.id, collectionId: s.collection_id, slug: s.slug, name: s.name, sortOrder: s.sort_order,
+  }))
+}
+
+async function uniqueCollectionSlug(base: string): Promise<string> {
+  const { data, error } = await supabase.from('collections').select('slug')
+  if (error) throw error
+  const taken = new Set((data ?? []).map((r) => r.slug))
+  if (!taken.has(base)) return base
+  for (let i = 2; ; i++) if (!taken.has(`${base}-${i}`)) return `${base}-${i}`
+}
+
+async function uniqueStyleSlug(collectionId: string, base: string): Promise<string> {
+  const { data, error } = await supabase
+    .from('subcollections').select('slug').eq('collection_id', collectionId)
+  if (error) throw error
+  const taken = new Set((data ?? []).map((r) => r.slug))
+  if (!taken.has(base)) return base
+  for (let i = 2; ; i++) if (!taken.has(`${base}-${i}`)) return `${base}-${i}`
+}
+
+export async function createCollection(name: string): Promise<Collection> {
+  const slug = await uniqueCollectionSlug(slugify(name) || 'colecao')
+  const { data: maxRow } = await supabase
+    .from('collections').select('sort_order').order('sort_order', { ascending: false }).limit(1).maybeSingle()
+  const sortOrder = (maxRow?.sort_order ?? -1) + 1
+  const { data, error } = await supabase
+    .from('collections').insert({ slug, name, sort_order: sortOrder }).select('*').single()
+  if (error) throw error
+  const { error: subErr } = await supabase
+    .from('subcollections').insert({ collection_id: data.id, slug: 'padrao', name: 'Padrão', sort_order: 0 })
+  if (subErr) throw subErr
+  return { id: data.id, slug: data.slug, name: data.name, sortOrder: data.sort_order }
+}
+
+export async function createSubcollection(collectionId: string, name: string): Promise<Subcollection> {
+  const slug = await uniqueStyleSlug(collectionId, slugify(name) || 'estilo')
+  const { data: maxRow } = await supabase
+    .from('subcollections').select('sort_order').eq('collection_id', collectionId)
+    .order('sort_order', { ascending: false }).limit(1).maybeSingle()
+  const sortOrder = (maxRow?.sort_order ?? -1) + 1
+  const { data, error } = await supabase
+    .from('subcollections').insert({ collection_id: collectionId, slug, name, sort_order: sortOrder })
+    .select('*').single()
+  if (error) throw error
+  return { id: data.id, collectionId: data.collection_id, slug: data.slug, name: data.name, sortOrder: data.sort_order }
+}
+
+export async function renameSubcollection(id: string, name: string): Promise<void> {
+  const { error } = await supabase.from('subcollections').update({ name }).eq('id', id)
+  if (error) throw error
+}
+
+export async function createCards(subcollectionId: string, cards: NewCard[]): Promise<void> {
   if (cards.length === 0) return
-  const rows = cards.map((c, i) => ({
-    collection_id: collectionId,
+  const { data: sub, error: subErr } = await supabase
+    .from('subcollections').select('collection_id').eq('id', subcollectionId).single()
+  if (subErr) throw subErr
+  const existing = await listCardsBySubcollection(subcollectionId)
+  const numbered = assignNumbers(cards, existing.map((c) => c.number))
+  const rows = numbered.map((c, i) => ({
+    collection_id: sub.collection_id,
+    subcollection_id: subcollectionId,
     number: c.number,
     name: c.name,
     aspect_ratio: c.aspectRatio,
     tags: c.tags,
-    sort_order: i,
+    sort_order: existing.length + i,
   }))
   const { error } = await supabase.from('cards').insert(rows)
   if (error) throw error

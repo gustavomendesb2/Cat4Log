@@ -3,7 +3,7 @@ import { collectionProgress, filterCards } from './derive'
 import type { Card } from './types'
 
 const card = (over: Partial<Card>): Card => ({
-  id: 'x', collectionId: 'c', number: '001', name: 'Bulbasaur',
+  id: 'x', collectionId: 'c', subcollectionId: 's', number: '001', name: 'Bulbasaur',
   imagePath: null, aspectRatio: '9:16', tags: [], status: 'empty', sortOrder: 0, ...over,
 })
 
