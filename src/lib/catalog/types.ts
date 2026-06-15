@@ -8,9 +8,18 @@ export interface Collection {
   sortOrder: number
 }
 
+export interface Subcollection {
+  id: string
+  collectionId: string
+  slug: string
+  name: string
+  sortOrder: number
+}
+
 export interface Card {
   id: string
   collectionId: string
+  subcollectionId: string
   number: string
   name: string
   imagePath: string | null
@@ -20,9 +29,9 @@ export interface Card {
   sortOrder: number
 }
 
-/** A new card before it exists in the DB (used by AddFlow + seed). */
+/** A new card before it exists in the DB. `number` empty/undefined triggers auto-numbering. */
 export interface NewCard {
-  number: string
+  number?: string
   name: string
   aspectRatio: AspectRatio
   tags: string[]
