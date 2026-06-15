@@ -14,6 +14,7 @@ function Gate() {
     <Routes>
       <Route path="/" element={<Navigate to="/pokemon" replace />} />
       <Route path="/:slug" element={<CollectionPage />} />
+      <Route path="/:slug/:style" element={<CollectionPage />} />
       <Route path="*" element={<Navigate to="/pokemon" replace />} />
     </Routes>
   )
