@@ -23,8 +23,8 @@ export function parseCardsCsv(text: string): CsvParseResult {
     const cols = lines[i].split(',')
     const number = (cols[numIdx] ?? '').trim()
     const name = (cols[nameIdx] ?? '').trim()
-    if (!number || !name) {
-      errors.push(`Row ${i}: missing number or name`)
+    if (!name) {
+      errors.push(`Row ${i}: missing name`)
       continue
     }
     const rawTags = tagsIdx === -1 ? '' : (cols[tagsIdx] ?? '').trim()

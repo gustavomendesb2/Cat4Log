@@ -20,11 +20,11 @@ describe('parseCardsCsv', () => {
     })
   })
 
-  it('reports rows missing required fields and skips them', () => {
-    const csv = 'number,name\n,NoNumber\n007,'
+  it('allows empty number (auto-numbered later) but requires name', () => {
+    const csv = 'number,name\n,Bulbasaur\n007,'
     const out = parseCardsCsv(csv)
-    expect(out.rows).toEqual([])
-    expect(out.errors).toHaveLength(2)
+    expect(out.rows).toEqual([{ number: '', name: 'Bulbasaur', aspectRatio: '3:4', tags: [] }])
+    expect(out.errors).toHaveLength(1)
   })
 
   it('errors on missing required headers', () => {
