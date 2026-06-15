@@ -80,7 +80,7 @@ export function CollectionPage() {
       <TopNavBar collections={collections} query={query} onQuery={setQuery}
         onAdd={() => setAdding(true)} onNewCollection={() => setNewCollectionOpen(true)} />
       <main className="mx-auto max-w-studio px-10 py-8">
-        {collection && subs.length > 1 && (
+        {collection && (
           <StyleTabs collection={collection} subcollections={subs} activeStyleSlug={style ?? null}
             onCreateStyle={() => setNewStyleOpen(true)} onRenameStyle={(s) => setRenaming(s)} />
         )}
