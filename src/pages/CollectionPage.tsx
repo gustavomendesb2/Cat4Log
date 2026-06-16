@@ -55,8 +55,9 @@ export function CollectionPage() {
 
   useEffect(() => {
     let alive = true
-    setLoading(true)
-    getCollectionBySlug(slug).then(async (col) => {
+    async function load() {
+      setLoading(true)
+      const col = await getCollectionBySlug(slug)
       if (!alive || !col) return
       setCollection(col)
       const s = await listSubcollections(col.id)
@@ -65,7 +66,8 @@ export function CollectionPage() {
       const styleSub = style ? s.find((x) => x.slug === style) ?? null : null
       const list = styleSub ? await listCardsBySubcollection(styleSub.id) : await listCardsByCollection(col.id)
       if (alive) { setCards(list); setLoading(false) }
-    })
+    }
+    load()
     return () => { alive = false }
   }, [slug, style])
 
