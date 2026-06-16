@@ -78,10 +78,10 @@ export function CollectionPage() {
   const defaultSubId = activeStyle?.id ?? subs[0]?.id ?? ''
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <TopNavBar collections={collections} query={query} onQuery={setQuery}
         onAdd={() => setAdding(true)} onNewCollection={() => setNewCollectionOpen(true)} />
-      <main className="mx-auto max-w-studio px-10 py-8">
+      <main className="mx-auto max-w-studio px-4 py-6 sm:px-10 sm:py-8">
         {collection && (
           <StyleTabs collection={collection} subcollections={subs} activeStyleSlug={style ?? null}
             onCreateStyle={() => setNewStyleOpen(true)} onRenameStyle={(s) => setRenaming(s)} />
