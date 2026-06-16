@@ -86,19 +86,20 @@ export function CollectionPage() {
         )}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <ProgressBar filled={progress.filled} total={progress.total} />
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-1.5 text-sm">
             {(['all', 'empty', 'filled'] as const).map((s) => (
               <button key={s} onClick={() => setStatusFilter(s)}
-                className={`rounded px-3 py-1 ${statusFilter === s ? 'bg-on-surface text-surface' : 'text-on-variant hover:text-on-surface'}`}>
+                className={`rounded-full px-3.5 py-1.5 transition ${statusFilter === s ? 'bg-accent font-medium text-surface-dim' : 'text-on-variant hover:bg-surface-2 hover:text-on-surface'}`}>
                 {s === 'all' ? 'Todos' : s === 'empty' ? 'Vazios' : 'Preenchidos'}
               </button>
             ))}
+            <span className="mx-1 h-4 w-px bg-surface-bright/60" />
             <button onClick={() => setDensity(density === 'comfortable' ? 'compact' : 'comfortable')}
-              className="rounded px-3 py-1 text-on-variant hover:text-on-surface">
+              className="rounded-full px-3.5 py-1.5 text-on-variant transition hover:bg-surface-2 hover:text-on-surface">
               {density === 'comfortable' ? 'Compacto' : 'Confortável'}
             </button>
             <button onClick={() => collection && exportCsv(collection.name, cards)}
-              className="rounded px-3 py-1 text-on-variant hover:text-on-surface">Exportar</button>
+              className="rounded-full px-3.5 py-1.5 text-on-variant transition hover:bg-surface-2 hover:text-on-surface">Exportar</button>
           </div>
         </div>
         <CollectionGrid cards={visible} loading={loading} density={density} onOpen={setActive} />
