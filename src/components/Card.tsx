@@ -21,11 +21,8 @@ export function Card({ card, onOpen }: { card: CardType; onOpen: (c: CardType) =
         hover:shadow-card focus-visible:ring-2 focus-visible:ring-accent ${ASPECT[card.aspectRatio]}`}
     >
       {url ? (
-        <>
-          <img src={url} alt={card.name} loading="lazy"
-            className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.04]" />
-          <span className="pointer-events-none absolute right-2 top-2 h-2 w-2 rounded-full bg-accent shadow-[0_0_8px] shadow-accent/70" />
-        </>
+        <img src={url} alt={card.name} loading="lazy"
+          className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.04]" />
       ) : (
         <div className="flex h-full w-full items-center justify-center border border-dashed border-surface-bright/50">
           <span className="font-display text-4xl tracking-tight text-on-faint/60">{card.number}</span>
