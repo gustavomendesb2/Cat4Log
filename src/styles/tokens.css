@@ -1,10 +1,23 @@
 :root {
-  --surface: #131313;
-  --surface-dim: #0e0e0e;
-  --surface-bright: #3a3939;
-  --on-surface: #ffffff;
-  --on-surface-variant: #a1a1a1;
-  --radius: 4px;
+  /* rampa de neutros — canais RGB para o <alpha-value> do Tailwind */
+  --surface-dim-rgb: 10 10 11;
+  --surface-rgb: 18 18 20;
+  --surface-2-rgb: 26 26 29;
+  --surface-3-rgb: 36 36 41;
+  --surface-bright-rgb: 56 56 63;
+
+  --on-surface-rgb: 245 245 244;
+  --on-surface-variant-rgb: 150 150 156;
+  --on-surface-faint-rgb: 92 92 99;
+
+  /* acento — esmeralda */
+  --accent-rgb: 52 211 153;
+  --accent-strong-rgb: 16 185 129;
+
+  --radius: 6px;
+  --radius-lg: 14px;
   --margin-x: 40px;
-  --backdrop: rgba(0, 0, 0, 0.85);
+  --backdrop: rgba(0, 0, 0, 0.78);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 10px 34px rgba(0, 0, 0, 0.5);
 }
