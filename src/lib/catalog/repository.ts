@@ -71,7 +71,8 @@ export async function listSubcollections(collectionId: string): Promise<Subcolle
     .from('subcollections').select('*').eq('collection_id', collectionId).order('sort_order')
   if (error) throw error
   return data.map((s) => ({
-    id: s.id, collectionId: s.collection_id, slug: s.slug, name: s.name, sortOrder: s.sort_order,
+    id: s.id, collectionId: s.collection_id, slug: s.slug, name: s.name,
+    description: s.description ?? null, sortOrder: s.sort_order,
   }))
 }
 
@@ -106,21 +107,31 @@ export async function createCollection(name: string): Promise<Collection> {
   return { id: data.id, slug: data.slug, name: data.name, sortOrder: data.sort_order }
 }
 
-export async function createSubcollection(collectionId: string, name: string): Promise<Subcollection> {
+export async function createSubcollection(
+  collectionId: string, name: string, description: string | null = null,
+): Promise<Subcollection> {
   const slug = await uniqueStyleSlug(collectionId, slugify(name) || 'estilo')
   const { data: maxRow } = await supabase
     .from('subcollections').select('sort_order').eq('collection_id', collectionId)
     .order('sort_order', { ascending: false }).limit(1).maybeSingle()
   const sortOrder = (maxRow?.sort_order ?? -1) + 1
   const { data, error } = await supabase
-    .from('subcollections').insert({ collection_id: collectionId, slug, name, sort_order: sortOrder })
+    .from('subcollections').insert({ collection_id: collectionId, slug, name, description, sort_order: sortOrder })
     .select('*').single()
   if (error) throw error
-  return { id: data.id, collectionId: data.collection_id, slug: data.slug, name: data.name, sortOrder: data.sort_order }
+  return {
+    id: data.id, collectionId: data.collection_id, slug: data.slug, name: data.name,
+    description: data.description ?? null, sortOrder: data.sort_order,
+  }
 }
 
-export async function renameSubcollection(id: string, name: string): Promise<void> {
-  const { error } = await supabase.from('subcollections').update({ name }).eq('id', id)
+export async function updateSubcollection(
+  id: string, patch: { name?: string; description?: string | null },
+): Promise<void> {
+  const dbPatch: Record<string, unknown> = {}
+  if (patch.name !== undefined) dbPatch.name = patch.name
+  if (patch.description !== undefined) dbPatch.description = patch.description
+  const { error } = await supabase.from('subcollections').update(dbPatch).eq('id', id)
   if (error) throw error
 }
 

@@ -10,7 +10,7 @@ import { NameModal } from '../components/NameModal'
 import { collectionProgress, filterCards } from '../lib/catalog/derive'
 import {
   createCollection, createSubcollection, getCollectionBySlug, listCardsByCollection,
-  listCardsBySubcollection, listCollections, listSubcollections, renameSubcollection,
+  listCardsBySubcollection, listCollections, listSubcollections, updateSubcollection,
 } from '../lib/catalog/repository'
 import type { Card, CardStatus, Collection, Subcollection } from '../lib/catalog/types'
 
@@ -86,6 +86,9 @@ export function CollectionPage() {
           <StyleTabs collection={collection} subcollections={subs} activeStyleSlug={style ?? null}
             onCreateStyle={() => setNewStyleOpen(true)} onRenameStyle={(s) => setRenaming(s)} />
         )}
+        {activeStyle?.description && (
+          <p className="-mt-3 mb-6 max-w-prose text-sm text-on-variant">{activeStyle.description}</p>
+        )}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <ProgressBar filled={progress.filled} total={progress.total} />
           <div className="flex w-full flex-col gap-2 text-sm sm:w-auto sm:flex-row sm:items-center sm:gap-1.5">
@@ -132,19 +135,21 @@ export function CollectionPage() {
       )}
       {newStyleOpen && collection && (
         <NameModal title="Novo estilo" label="Nome do estilo" submitLabel="Criar"
+          descriptionLabel="Descrição (opcional)"
           onClose={() => setNewStyleOpen(false)}
-          onSubmit={async (name) => {
-            const created = await createSubcollection(collection.id, name)
+          onSubmit={async (name, description) => {
+            const created = await createSubcollection(collection.id, name, description || null)
             setSubs(await listSubcollections(collection.id))
             setNewStyleOpen(false)
             navigate(`/${collection.slug}/${created.slug}`)
           }} />
       )}
       {renaming && collection && (
-        <NameModal title="Renomear estilo" label="Novo nome" initial={renaming.name} submitLabel="Salvar"
+        <NameModal title="Editar estilo" label="Nome" initial={renaming.name} submitLabel="Salvar"
+          descriptionLabel="Descrição (opcional)" initialDescription={renaming.description ?? ''}
           onClose={() => setRenaming(null)}
-          onSubmit={async (name) => {
-            await renameSubcollection(renaming.id, name)
+          onSubmit={async (name, description) => {
+            await updateSubcollection(renaming.id, { name, description: description || null })
             setSubs(await listSubcollections(collection.id))
             setRenaming(null)
           }} />

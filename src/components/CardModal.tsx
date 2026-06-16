@@ -34,16 +34,16 @@ export function CardModal({ card, onClose, onChanged }: {
   }
 
   return (
-    <div className="fixed inset-0 z-30 grid place-items-center p-4 sm:p-6" style={{ background: 'var(--backdrop)' }}
+    <div className="fixed inset-0 z-30 grid place-items-center p-4 sm:p-0" style={{ background: 'var(--backdrop)' }}
       onClick={onClose}>
       <motion.div
         initial={reduce ? false : { opacity: 0, scale: 0.97, y: 8 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="modal-card relative !w-auto max-w-[92vw] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        className="modal-card relative !w-auto max-w-[92vw] overflow-hidden sm:max-w-[96vw]" onClick={(e) => e.stopPropagation()}>
 
         {url ? (
-          <img src={url} alt={card.name} className="block max-h-[88vh] w-auto max-w-[92vw] object-contain" />
+          <img src={url} alt={card.name} className="block max-h-[88vh] w-auto max-w-[92vw] object-contain sm:h-[100dvh] sm:max-h-[100dvh] sm:max-w-[96vw]" />
         ) : (
           <div className="grid aspect-[9/16] w-[min(80vw,360px)] place-items-center bg-surface-dim text-on-faint">Sem imagem</div>
         )}
