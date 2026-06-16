@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 
 const REMEMBERED_EMAIL_KEY = 'cat4log_remembered_email'
@@ -9,6 +10,7 @@ export function LoginScreen() {
   const [rememberEmail, setRememberEmail] = useState(() => !!localStorage.getItem(REMEMBERED_EMAIL_KEY))
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const reduce = useReducedMotion()
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -21,25 +23,30 @@ export function LoginScreen() {
   }
 
   return (
-    <div className="min-h-screen grid place-items-center bg-surface px-6">
-      <form onSubmit={onSubmit} className="w-full max-w-sm space-y-4">
-        <h1 className="font-display text-3xl">Studio</h1>
-        <input className="w-full rounded bg-surface-dim border border-surface-bright px-3 py-2 text-on-surface"
-          type="email" placeholder="Email" autoComplete="email"
+    <div className="grid min-h-screen place-items-center px-6">
+      <motion.form
+        initial={reduce ? false : { opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        onSubmit={onSubmit} className="w-full max-w-sm space-y-5">
+        <div className="space-y-1 text-center">
+          <h1 className="font-display text-4xl tracking-tight">cat4log</h1>
+          <p className="text-sm text-on-faint">Entre para gerenciar suas coleções</p>
+        </div>
+        <input className="field" type="email" placeholder="Email" autoComplete="email"
           value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input className="w-full rounded bg-surface-dim border border-surface-bright px-3 py-2 text-on-surface"
-          type="password" placeholder="Senha" autoComplete="current-password"
+        <input className="field" type="password" placeholder="Senha" autoComplete="current-password"
           value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <label className="flex items-center gap-2 text-sm text-on-surface/60 cursor-pointer select-none">
+        <label className="flex cursor-pointer select-none items-center gap-2 text-sm text-on-variant">
           <input type="checkbox" checked={rememberEmail} onChange={(e) => setRememberEmail(e.target.checked)}
-            className="accent-on-surface" />
+            className="accent-accent" />
           Lembrar email
         </label>
         {error && <p className="text-sm text-red-400">{error}</p>}
-        <button disabled={busy} className="w-full rounded bg-on-surface text-surface py-2 font-medium disabled:opacity-50">
+        <button disabled={busy} className="btn-primary w-full">
           {busy ? 'Entrando…' : 'Entrar'}
         </button>
-      </form>
+      </motion.form>
     </div>
   )
 }
