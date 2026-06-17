@@ -1,0 +1,63 @@
+number,name,tags
+001,Superman,Herói; Liga da Justiça; Metrópolis; Kryptoniano
+002,Batman,Herói; Liga da Justiça; Bat-família; Gotham; Vigilante
+003,Wonder Woman,Herói; Liga da Justiça; Themyscira; Amazona
+004,The Flash,Herói; Liga da Justiça; Central City; Metahuman
+005,Green Lantern,Herói; Liga da Justiça; Tropa Lanterna Verde; Coast City
+006,Aquaman,Herói; Liga da Justiça; Atlântida; Atlante
+007,Cyborg,Herói; Liga da Justiça; Teen Titans; Metahuman
+008,Martian Manhunter,Herói; Liga da Justiça; Alienígena
+009,Green Arrow,Herói; Liga da Justiça; Star City; Vigilante
+010,Shazam,Herói; Liga da Justiça; Mágico
+011,Black Canary,Herói; Liga da Justiça; Star City; Metahuman
+012,Hawkman,Herói; Liga da Justiça; Sociedade da Justiça
+013,Hawkgirl,Herói; Liga da Justiça; Sociedade da Justiça
+014,Zatanna,Herói; Liga da Justiça; Mágico
+015,Firestorm,Herói; Liga da Justiça; Metahuman
+016,Nightwing,Herói; Bat-família; Teen Titans; Gotham
+017,Batgirl,Herói; Bat-família; Gotham
+018,Robin,Herói; Bat-família; Gotham
+019,Red Hood,Anti-herói; Bat-família; Gotham
+020,Red Robin,Herói; Bat-família; Gotham
+021,Batwoman,Herói; Bat-família; Gotham
+022,Catwoman,Anti-herói; Gotham; Vigilante
+023,Alfred Pennyworth,Herói; Bat-família; Gotham
+024,James Gordon,Herói; Gotham
+025,Supergirl,Herói; Metrópolis; Kryptoniano
+026,Superboy,Herói; Teen Titans; Metrópolis; Kryptoniano
+027,Starfire,Herói; Teen Titans; Alienígena
+028,Raven,Herói; Teen Titans; Mágico
+029,Beast Boy,Herói; Teen Titans; Metahuman
+030,John Stewart,Herói; Tropa Lanterna Verde; Liga da Justiça
+031,John Constantine,Anti-herói; Mágico
+032,Joker,Vilão; Gotham; Legião do Mal
+033,Harley Quinn,Anti-herói; Esquadrão Suicida; Gotham
+034,Two-Face,Vilão; Gotham
+035,The Riddler,Vilão; Gotham
+036,Penguin,Vilão; Gotham
+037,Bane,Vilão; Gotham
+038,Ra's al Ghul,Vilão; Gotham
+039,Scarecrow,Vilão; Gotham
+040,Mr. Freeze,Vilão; Gotham
+041,Poison Ivy,Vilão; Gotham; Metahuman
+042,Killer Croc,Vilão; Gotham; Metahuman
+043,Lex Luthor,Vilão; Metrópolis; Legião do Mal
+044,Brainiac,Vilão; Alienígena
+045,Doomsday,Vilão; Metrópolis; Kryptoniano
+046,General Zod,Vilão; Kryptoniano
+047,Bizarro,Vilão; Metrópolis; Kryptoniano
+048,Darkseid,Vilão; Apokolips; Novo Deus; Legião do Mal
+049,Sinestro,Vilão; Coast City; Tropa Lanterna Verde
+050,Black Adam,Anti-herói; Mágico
+051,Deathstroke,Vilão; Teen Titans; Mercenário
+052,Reverse-Flash,Vilão; Central City
+053,Captain Cold,Vilão; Central City
+054,Cheetah,Vilão; Metahuman
+055,Ares,Vilão; Themyscira; Mágico
+056,Black Manta,Vilão; Atlântida
+057,Gorilla Grodd,Vilão; Central City; Metahuman
+058,Deadshot,Anti-herói; Esquadrão Suicida
+059,Captain Boomerang,Vilão; Esquadrão Suicida; Central City
+060,Amanda Waller,Anti-herói; Esquadrão Suicida
+061,Lobo,Anti-herói; Alienígena; Mercenário
+062,Steppenwolf,Vilão; Apokolips; Novo Deus

@@ -1,0 +1,60 @@
+number,name,tags
+001,Naruto Uzumaki,Folha; Time 7; Jinchuriki; Uzumaki
+002,Sasuke Uchiha,Folha; Time 7; Uchiha; Taka
+003,Sakura Haruno,Folha; Time 7; Médico-nin
+004,Kakashi Hatake,Folha; Time 7; Sensei; Hokage
+005,Sai,Folha; Time 7; Raiz
+006,Yamato,Folha; Time 7; Senju; ANBU
+007,Shikamaru Nara,Folha; Time 10; Nara
+008,Choji Akimichi,Folha; Time 10; Akimichi
+009,Ino Yamanaka,Folha; Time 10; Yamanaka
+010,Asuma Sarutobi,Folha; Time 10; Sensei; Sarutobi
+011,Kiba Inuzuka,Folha; Time 8; Inuzuka
+012,Shino Aburame,Folha; Time 8; Aburame
+013,Hinata Hyuga,Folha; Time 8; Hyuga
+014,Kurenai Yuhi,Folha; Time 8; Sensei
+015,Rock Lee,Folha; Time Gai; Taijutsu
+016,Neji Hyuga,Folha; Time Gai; Hyuga
+017,Tenten,Folha; Time Gai
+018,Might Guy,Folha; Time Gai; Sensei; Taijutsu
+019,Konohamaru Sarutobi,Folha; Sarutobi
+020,Iruka Umino,Folha; Sensei
+021,Jiraiya,Folha; Sannin; Sensei
+022,Tsunade Senju,Folha; Sannin; Hokage; Senju; Médico-nin
+023,Orochimaru,Folha; Sannin; Som; Vilão
+024,Hashirama Senju,Folha; Hokage; Senju
+025,Tobirama Senju,Folha; Hokage; Senju
+026,Hiruzen Sarutobi,Folha; Hokage; Sarutobi
+027,Minato Namikaze,Folha; Hokage; Sensei
+028,Danzo Shimura,Folha; Raiz; Hokage; Vilão
+029,Gaara,Areia; Kage; Jinchuriki
+030,Temari,Areia; Kage; Folha
+031,Kankuro,Areia; Marionetista
+032,Chiyo,Areia; Médico-nin; Marionetista
+033,A,Nuvem; Kage
+034,Killer Bee,Nuvem; Jinchuriki; Espadachim
+035,Mei Terumi,Névoa; Kage
+036,Onoki,Pedra; Kage
+037,Nagato Uzumaki,Akatsuki; Chuva; Uzumaki; Vilão
+038,Konan,Akatsuki; Chuva
+039,Itachi Uchiha,Akatsuki; Uchiha; Folha; ANBU
+040,Kisame Hoshigaki,Akatsuki; Névoa; Espadachim
+041,Deidara,Akatsuki; Pedra; Vilão
+042,Sasori,Akatsuki; Areia; Marionetista
+043,Hidan,Akatsuki; Vilão
+044,Kakuzu,Akatsuki; Névoa; Vilão
+045,Obito Uchiha,Akatsuki; Uchiha; Folha; Vilão
+046,Madara Uchiha,Akatsuki; Uchiha; Vilão
+047,Zetsu,Akatsuki; Vilão
+048,Kabuto Yakushi,Som; Médico-nin; Vilão
+049,Suigetsu Hozuki,Taka; Névoa; Espadachim
+050,Karin Uzumaki,Taka; Uzumaki; Médico-nin
+051,Jugo,Taka; Som
+052,Shizune,Folha; Médico-nin
+053,Zabuza Momochi,Névoa; Espadachim; Vilão
+054,Haku,Névoa; Vilão
+055,Kimimaro Kaguya,Som; Kaguya; Vilão
+056,Kaguya Otsutsuki,Otsutsuki; Vilão
+057,Kurama,Bijuu; Folha
+058,Shukaku,Bijuu; Areia
+059,Gyuki,Bijuu; Nuvem
