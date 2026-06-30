@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom'
-import { Plus, Search } from 'lucide-react'
+import { Plus, Search, LogIn, LogOut } from 'lucide-react'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../auth/authContext'
 
 interface Props {
   collections: { slug: string; name: string }[]
@@ -7,9 +9,12 @@ interface Props {
   onQuery: (v: string) => void
   onAdd: () => void
   onNewCollection: () => void
+  onLoginOpen: () => void
 }
 
-export function TopNavBar({ collections, query, onQuery, onAdd, onNewCollection }: Props) {
+export function TopNavBar({ collections, query, onQuery, onAdd, onNewCollection, onLoginOpen }: Props) {
+  const { session } = useAuth()
+
   const collectionNav = (
     <>
       {collections.map((c) => (
@@ -24,10 +29,12 @@ export function TopNavBar({ collections, query, onQuery, onAdd, onNewCollection 
           )}
         </NavLink>
       ))}
-      <button onClick={onNewCollection} aria-label="Nova coleção"
-        className="flex shrink-0 items-center gap-1 text-sm text-on-variant transition-colors hover:text-on-surface">
-        <Plus size={14} /> coleção
-      </button>
+      {session && (
+        <button onClick={onNewCollection} aria-label="Nova coleção"
+          className="flex shrink-0 items-center gap-1 text-sm text-on-variant transition-colors hover:text-on-surface">
+          <Plus size={14} /> coleção
+        </button>
+      )}
     </>
   )
 
@@ -44,11 +51,24 @@ export function TopNavBar({ collections, query, onQuery, onAdd, onNewCollection 
               <input value={query} onChange={(e) => onQuery(e.target.value)} placeholder="Buscar…"
                 className="w-full min-w-0 bg-transparent text-sm text-on-surface outline-none placeholder:text-on-faint sm:w-40" />
             </div>
-            <button onClick={onAdd} aria-label="Adicionar card"
-              className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent text-surface-dim transition
-                hover:bg-accent-strong focus-visible:ring-2 focus-visible:ring-accent/50">
-              <Plus size={18} />
-            </button>
+            {session ? (
+              <>
+                <button onClick={onAdd} aria-label="Adicionar card"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent text-surface-dim transition
+                    hover:bg-accent-strong focus-visible:ring-2 focus-visible:ring-accent/50">
+                  <Plus size={18} />
+                </button>
+                <button onClick={() => supabase.auth.signOut()} aria-label="Sair"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-on-variant transition hover:bg-surface-2 hover:text-on-surface">
+                  <LogOut size={18} />
+                </button>
+              </>
+            ) : (
+              <button onClick={onLoginOpen} aria-label="Entrar"
+                className="flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm text-on-variant transition hover:bg-surface-2 hover:text-on-surface">
+                <LogIn size={15} /> Entrar
+              </button>
+            )}
           </div>
         </div>
         <nav className="no-scrollbar -mx-4 flex items-center gap-5 overflow-x-auto px-4 pb-2.5 md:hidden">
