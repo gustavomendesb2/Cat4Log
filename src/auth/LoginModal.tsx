@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { supabase } from '../lib/supabase'
@@ -12,6 +12,12 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const reduce = useReducedMotion()
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose])
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -47,7 +53,7 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
           <X size={16} />
         </button>
         <div className="space-y-1 text-center">
-          <h1 className="font-display text-3xl tracking-tight">cat4log</h1>
+          <h2 className="font-display text-3xl tracking-tight">cat4log</h2>
           <p className="text-sm text-on-faint">Entre para gerenciar suas coleções</p>
         </div>
         <input className="field" type="email" placeholder="Email" autoComplete="email"
@@ -59,7 +65,7 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
             className="accent-accent" />
           Lembrar email
         </label>
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && <p role="alert" className="text-sm text-red-400">{error}</p>}
         <button disabled={busy} className="btn-primary w-full">
           {busy ? 'Entrando…' : 'Entrar'}
         </button>
