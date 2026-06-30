@@ -3,25 +3,26 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { X, Upload, Trash2, Settings2 } from 'lucide-react'
 import type { AspectRatio, Card } from '../lib/catalog/types'
 import { deleteCard, imageUrl, updateCard, uploadCardImage } from '../lib/catalog/repository'
+import { useAuth } from '../auth/authContext'
 
 const RATIOS: AspectRatio[] = ['1:1', '9:16', '3:4']
 
 export function CardModal({ card, onClose, onChanged }: {
   card: Card; onClose: () => void; onChanged: () => void
 }) {
+  const { session } = useAuth()
   const fileRef = useRef<HTMLInputElement>(null)
   const [busy, setBusy] = useState(false)
-  const [optimize, setOptimize] = useState(true)
   const [tags, setTags] = useState(card.tags.join(', '))
   const [ratio, setRatio] = useState<AspectRatio>(card.aspectRatio)
-  const [editing, setEditing] = useState(false)
+  const [editing, setEditing] = useState(!card.imagePath)
   const reduce = useReducedMotion()
   const url = imageUrl(card.imagePath)
 
   async function onFile(file: File | undefined) {
     if (!file) return
     setBusy(true)
-    await uploadCardImage(card, file, optimize)
+    await uploadCardImage(card, file, false)
     setBusy(false); onChanged(); onClose()
   }
   async function saveMeta() {
@@ -54,56 +55,55 @@ export function CardModal({ card, onClose, onChanged }: {
           <h2 className="font-display text-2xl leading-tight text-white">{card.name}</h2>
         </div>
 
-        {/* painel de edição sobre a imagem */}
-        <AnimatePresence>
-          {editing && (
-            <motion.div
-              initial={reduce ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="absolute inset-0 z-10 flex flex-col justify-end gap-4 overflow-y-auto bg-black/60 p-5 backdrop-blur-md">
-              <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => onFile(e.target.files?.[0])} />
+        {/* painel de edição — só para autenticados */}
+        {session && (
+          <AnimatePresence>
+            {editing && (
+              <motion.div
+                initial={reduce ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="absolute inset-0 z-10 flex flex-col justify-end gap-4 overflow-y-auto bg-black/60 p-5 backdrop-blur-md">
+                <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => onFile(e.target.files?.[0])} />
 
-              <button disabled={busy} onClick={() => fileRef.current?.click()} className="btn-primary w-full">
-                <Upload size={16} /> {url ? 'Trocar imagem' : 'Enviar imagem'}
-              </button>
+                <button disabled={busy} onClick={() => fileRef.current?.click()} className="btn-primary w-full">
+                  <Upload size={16} /> {url ? 'Trocar imagem' : 'Enviar imagem'}
+                </button>
 
-              <label className="flex items-center gap-2 text-sm text-white/80">
-                <input type="checkbox" checked={optimize} onChange={(e) => setOptimize(e.target.checked)} className="accent-accent" />
-                Otimizar imagem antes de enviar (WebP, máx 1600px)
-              </label>
-
-              <div className="space-y-3">
-                <div>
-                  <label className="mb-1 block text-xs uppercase tracking-wide text-white/50">Proporção</label>
-                  <select value={ratio} onChange={(e) => setRatio(e.target.value as AspectRatio)} className="field">
-                    {RATIOS.map((r) => <option key={r} value={r}>{r}</option>)}
-                  </select>
+                <div className="space-y-3">
+                  <div>
+                    <label className="mb-1 block text-xs uppercase tracking-wide text-white/50">Proporção</label>
+                    <select value={ratio} onChange={(e) => setRatio(e.target.value as AspectRatio)} className="field">
+                      {RATIOS.map((r) => <option key={r} value={r}>{r}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs uppercase tracking-wide text-white/50">Tags</label>
+                    <input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="tags, separadas, por vírgula" className="field" />
+                  </div>
                 </div>
-                <div>
-                  <label className="mb-1 block text-xs uppercase tracking-wide text-white/50">Tags</label>
-                  <input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="tags, separadas, por vírgula" className="field" />
+
+                <div className="flex items-center gap-2">
+                  <button disabled={busy} onClick={saveMeta} className="btn-primary flex-1">Salvar</button>
+                  <button disabled={busy} onClick={remove} aria-label="Excluir card"
+                    className="rounded border border-white/20 px-3 py-2 text-red-400 transition hover:bg-red-500/10"><Trash2 size={16} /></button>
                 </div>
-              </div>
+                {busy && <p className="text-sm text-white/70">Processando…</p>}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
 
-              <div className="flex items-center gap-2">
-                <button disabled={busy} onClick={saveMeta} className="btn-primary flex-1">Salvar</button>
-                <button disabled={busy} onClick={remove} aria-label="Excluir card"
-                  className="rounded border border-white/20 px-3 py-2 text-red-400 transition hover:bg-red-500/10"><Trash2 size={16} /></button>
-              </div>
-              {busy && <p className="text-sm text-white/70">Processando…</p>}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* controles superiores (sempre acima do painel) */}
+        {/* controles superiores */}
         <div className="absolute right-3 top-3 z-20 flex gap-2">
-          <button onClick={() => setEditing((v) => !v)} aria-label={editing ? 'Fechar edição' : 'Editar'}
-            className={`grid h-8 w-8 place-items-center rounded-full backdrop-blur-sm transition
-              ${editing ? 'bg-accent text-surface-dim' : 'bg-black/30 text-white/75 hover:bg-black/55 hover:text-white'}`}>
-            <Settings2 size={16} />
-          </button>
+          {session && (
+            <button onClick={() => setEditing((v) => !v)} aria-label={editing ? 'Fechar edição' : 'Editar'}
+              className={`grid h-8 w-8 place-items-center rounded-full backdrop-blur-sm transition
+                ${editing ? 'bg-accent text-surface-dim' : 'bg-black/30 text-white/75 hover:bg-black/55 hover:text-white'}`}>
+              <Settings2 size={16} />
+            </button>
+          )}
           <button onClick={onClose} aria-label="Fechar"
             className="grid h-8 w-8 place-items-center rounded-full bg-black/30 text-white/75 backdrop-blur-sm transition hover:bg-black/55 hover:text-white">
             <X size={16} />
