@@ -26,7 +26,7 @@ function exportCsv(name: string, cards: Card[]) {
   URL.revokeObjectURL(a.href)
 }
 
-export function CollectionPage() {
+export function CollectionPage({ onLoginOpen }: { onLoginOpen: () => void }) {
   const { slug = 'pokemon', style } = useParams()
   const navigate = useNavigate()
   const [collections, setCollections] = useState<Collection[]>([])
@@ -80,7 +80,8 @@ export function CollectionPage() {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <TopNavBar collections={collections} query={query} onQuery={setQuery}
-        onAdd={() => setAdding(true)} onNewCollection={() => setNewCollectionOpen(true)} />
+        onAdd={() => setAdding(true)} onNewCollection={() => setNewCollectionOpen(true)}
+        onLoginOpen={onLoginOpen} />
       <main className="mx-auto max-w-studio px-4 py-6 sm:px-10 sm:py-8">
         {collection && (
           <StyleTabs collection={collection} subcollections={subs} activeStyleSlug={style ?? null}
