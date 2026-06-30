@@ -5,7 +5,7 @@ import { LoginModal } from './auth/LoginModal'
 import { CollectionPage } from './pages/CollectionPage'
 
 export function Gate() {
-  const { loading } = useAuth()
+  const { loading, session } = useAuth()
   const [loginOpen, setLoginOpen] = useState(false)
   const openLogin = useCallback(() => setLoginOpen(true), [])
   const closeLogin = useCallback(() => setLoginOpen(false), [])
@@ -20,7 +20,7 @@ export function Gate() {
         <Route path="/:slug/:style" element={<CollectionPage onLoginOpen={openLogin} />} />
         <Route path="*" element={<Navigate to="/pokemon" replace />} />
       </Routes>
-      {loginOpen && <LoginModal onClose={closeLogin} />}
+      {loginOpen && !session && <LoginModal onClose={closeLogin} />}
     </>
   )
 }
